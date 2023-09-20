@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${(mode.equals('details') ? 'View' : 'Add') + ' a Contact'}"></title>
+    <span th:replace="~{contact/list :: bootstrapImports}"></span>
+</head>
+<body>
+<main class="container">
+    <h1 th:text="${(mode.equals('details') ? 'View' : 'Add') + ' a Contact'}"></h1>
+    <hr>
+    <form action="#" th:action="@{/contact/add}" method="post" th:object="${contact}">
+        <input type="text" class="d-none" th:field="*{id}" readonly>
+        <div class="mb-3">
+            <label for="lastname" class="form-label">Nom:</label>
+            <input type="text" id="lastname" class="form-control" th:field="*{lastname}" th:readonly="${mode.equals('details')}" th:required="${mode.equals('add')}">
+        </div>
+        <div class="mb-3">
+            <label for="firstname" class="form-label">Prénom:</label>
+            <input type="text" id="firstname" class="form-control" th:field="*{firstname}" th:readonly="${mode.equals('details')}" th:required="${mode.equals('add')}">
+        </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">Age:</label>
+            <input type="number" min="0" max="110" id="age" class="form-control" th:field="*{age}" th:readonly="${mode.equals('details')}" th:required="${mode.equals('add')}">
+        </div>
+        <div class="text-end">
+            <a th:if="${mode.equals('details')}" class="btn btn-secondary" th:href="@{/contact/list}"><i class="bi bi-arrow-counterclockwise"></i> Return</a>
+            <button th:unless="${mode.equals('details')}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Add a Contact</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>
