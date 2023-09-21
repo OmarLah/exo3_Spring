@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Primary
@@ -56,6 +57,44 @@ public class ContactService {
         contacts.put(contactData.getId(), contactData);
 
         return contactData;
+    }
+
+    public Boolean deleteContactById(UUID id) {
+        Optional<ContactDTO> foundContact = getcontactById(id);
+
+        if(foundContact.isPresent()) {
+            contacts.remove(foundContact.get().getId());
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public ContactDTO editContact(UUID id, ContactDTO newDatas) {
+        AtomicReference<ContactDTO> atomicReference = new AtomicReference<>();
+
+        Optional<ContactDTO> foundContact = getcontactById(id);
+
+        foundContact.ifPresentOrElse(found -> {
+            if (newDatas.getLastname() != null) {
+                found.setLastname(newDatas.getLastname());
+            }
+
+            if (newDatas.getFirstname() != null) {
+                found.setFirstname(newDatas.getFirstname());
+            }
+
+            if (newDatas.getAge() != 0) {
+                found.setAge(newDatas.getAge());
+            }
+
+            atomicReference.set(found);
+        }, () -> {
+            atomicReference.set(null);
+        });
+
+        return atomicReference.get();
     }
 
 }

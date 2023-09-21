@@ -7,7 +7,7 @@
 </head>
 <body>
 <main class="container">
-    <h1 th:text="${(mode.equals('details') ? 'View' : 'Add') + ' a Contact'}"></h1>
+    <h1 th:text="${(mode.equals('details') || mode.equals('edit') ? 'View' : 'Add') + ' a Contact'}"></h1>
     <hr>
     <form action="#" th:action="@{/contact/add}" method="post" th:object="${contact}">
         <input type="text" class="d-none" th:field="*{id}" readonly>

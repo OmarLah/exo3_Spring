@@ -57,4 +57,32 @@ public class ContactController {
         return "redirect:/contact/list";
     }
 
+    @GetMapping("delete/{contactId}")
+    public String deleteContact(@PathVariable("contactId") UUID id) {
+
+        Optional<ContactDTO> foundContact = contactService.getcontactById(id);
+
+        if(foundContact.isPresent()) {
+            contactService.deleteContactById(foundContact.get().getId());
+            return "redirect:/contact/list";
+        }
+
+        throw new ResourceNotFound();
+    }
+
+    @GetMapping("edit/{contactId}")
+    public String editContact(@PathVariable("contactId") UUID id, Model model) {
+
+        Optional<ContactDTO> foundContact = contactService.getcontactById(id);
+
+        if (foundContact.isPresent()) {
+            model.addAttribute("contact", foundContact.get());
+            model.addAttribute("mode", "edit");
+
+            return "contact/contactForm";
+        }
+
+        throw new ResourceNotFound();
+    }
+
 }
