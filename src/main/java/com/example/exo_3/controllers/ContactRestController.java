@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/contacts")
 @Slf4j
-public class CarRestController {
+public class ContactRestController {
 
     private final ContactService contactService;
 

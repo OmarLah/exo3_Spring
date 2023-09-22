@@ -19,13 +19,20 @@
             <label for="firstname" class="form-label">Prénom:</label>
             <input type="text" id="firstname" class="form-control" th:field="*{firstname}" th:readonly="${mode.equals('details')}" th:required="${mode.equals('add')}">
         </div>
+<!--        <div class="mb-3">-->
+<!--            <label for="age" class="form-label">Age:</label>-->
+<!--            <input type="number" min="0" max="110" id="age" class="form-control" th:field="*{age}" th:readonly="${mode.equals('details')}" th:required="${mode.equals('add')}">-->
+<!--        </div>-->
         <div class="mb-3">
-            <label for="age" class="form-label">Age:</label>
-            <input type="number" min="0" max="110" id="age" class="form-control" th:field="*{age}" th:readonly="${mode.equals('details')}" th:required="${mode.equals('add')}">
+            <label for="birthDate" class="form-label">Age:</label>
+            <input type="date" id="birthDate" class="form-control"  th:field="*{birthDate}" th:readonly="${mode.equals('details')}" th:required="${mode.equals('add')}">
         </div>
+        <span th:field="*{birthDate}"></span>
         <div class="text-end">
             <a th:if="${mode.equals('details')}" class="btn btn-secondary" th:href="@{/contact/list}"><i class="bi bi-arrow-counterclockwise"></i> Return</a>
-            <button th:unless="${mode.equals('details')}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Add a Contact</button>
+            <button th:if="${mode.equals('edit')}" class="btn btn-success"><i class="bi bi-pencil"></i> Edit a Contact</button>
+            <button th:if="${mode.equals('add')}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Add a Contact</button>
+
         </div>
     </form>
 </main>

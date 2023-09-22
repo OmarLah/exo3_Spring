@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,9 +21,14 @@ public class ContactController {
     private final ContactService contactService;
 
     @GetMapping("list")
-    public String listContacts(Model model) {
+    public String listContacts(Model model, @RequestParam(value = "lastname", defaultValue = "") String value) {
 
-        model.addAttribute("contacts", contactService.getcontacts());
+        List<ContactDTO> contacts = contactService.getcontacts();
+        if (!value.isEmpty() && !value.isBlank()) {
+            contacts = contacts.stream().filter(c -> c.getLastname().startsWith(value)).toList();
+        }
+
+        model.addAttribute("contacts", contacts);
 
         return "contact/list";
     }
@@ -40,7 +47,7 @@ public class ContactController {
         throw new ResourceNotFound();
     }
 
-    @GetMapping("/add")
+    @GetMapping("add")
     public String getContactForm(Model model) {
 
 
@@ -50,7 +57,7 @@ public class ContactController {
         return "contact/contactForm";
     }
 
-    @PostMapping("/add")
+    @PostMapping("add")
     public String addContact(ContactDTO newContact) {
         contactService.addContact(newContact);
 
@@ -80,6 +87,20 @@ public class ContactController {
             model.addAttribute("mode", "edit");
 
             return "contact/contactForm";
+        }
+
+        throw new ResourceNotFound();
+    }
+
+    @PostMapping("edit/{contactId}")
+    public String editPost(@PathVariable("contactId") UUID id, Model model) {
+        Optional<ContactDTO> foundContact = contactService.getcontactById(id);
+
+        if (foundContact.isPresent()) {
+            model.addAttribute("contact", foundContact.get());
+            model.addAttribute("mode", "edit");
+
+            return "contact/list";
         }
 
         throw new ResourceNotFound();
